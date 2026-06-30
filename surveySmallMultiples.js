@@ -9,23 +9,26 @@ looker.plugins.visualizations.add({
       <style>
         .survey-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 18px;
           font-family: Arial, sans-serif;
           padding: 12px;
+          align-items: start;
         }
 
         .survey-card {
-          border: 1px solid #d1d5db;
+          border: 1px solid #d9dde3;
           border-radius: 10px;
           padding: 14px;
           background: #ffffff;
           box-shadow: 0 1px 3px rgba(0,0,0,0.08);
           box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
         }
 
         .survey-title {
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 600;
           line-height: 1.35;
           margin-bottom: 14px;
@@ -36,13 +39,8 @@ looker.plugins.visualizations.add({
           margin-bottom: 10px;
         }
 
-        .bar-row:last-child {
-          margin-bottom: 0;
-        }
-
         .bar-label {
           font-size: 12px;
-          font-weight: 400;
           margin-bottom: 4px;
           color: #374151;
           white-space: nowrap;
@@ -73,15 +71,34 @@ looker.plugins.visualizations.add({
         .bar-value {
           width: 48px;
           font-size: 12px;
+          font-weight: 700;
           text-align: right;
           color: #111827;
-          font-weight: 700;
+          flex-shrink: 0;
         }
 
         .survey-empty {
           padding: 20px;
           font-size: 13px;
           color: #555;
+        }
+
+        @media (max-width: 1400px) {
+          .survey-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 1000px) {
+          .survey-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 700px) {
+          .survey-grid {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+          }
         }
       </style>
 
@@ -92,6 +109,29 @@ looker.plugins.visualizations.add({
   updateAsync: function (data, element, config, queryResponse, details, done) {
     const grid = element.querySelector(".survey-grid");
     grid.innerHTML = "";
+
+    function equalizeCardHeights() {
+      const cards = [...grid.querySelectorAll(".survey-card")];
+
+      cards.forEach((card) => {
+        card.style.height = "auto";
+      });
+
+      const rows = {};
+
+      cards.forEach((card) => {
+        const top = Math.round(card.offsetTop);
+        if (!rows[top]) rows[top] = [];
+        rows[top].push(card);
+      });
+
+      Object.values(rows).forEach((rowCards) => {
+        const maxHeight = Math.max(...rowCards.map((card) => card.offsetHeight));
+        rowCards.forEach((card) => {
+          card.style.height = maxHeight + "px";
+        });
+      });
+    }
 
     const dimensions = queryResponse.fields.dimensions || [];
     const measures = queryResponse.fields.measures || [];
@@ -177,28 +217,7 @@ looker.plugins.visualizations.add({
     });
 
     requestAnimationFrame(() => {
-      const cards = Array.from(grid.querySelectorAll(".survey-card"));
-
-      cards.forEach((card) => {
-        card.style.height = "auto";
-      });
-
-      const rows = {};
-
-      cards.forEach((card) => {
-        const top = Math.round(card.offsetTop);
-        if (!rows[top]) rows[top] = [];
-        rows[top].push(card);
-      });
-
-      Object.values(rows).forEach((rowCards) => {
-        const maxHeight = Math.max(...rowCards.map((card) => card.offsetHeight));
-
-        rowCards.forEach((card) => {
-          card.style.height = `${maxHeight}px`;
-        });
-      });
-
+      equalizeCardHeights();
       done();
     });
   }
