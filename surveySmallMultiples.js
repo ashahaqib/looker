@@ -25,7 +25,7 @@ looker.plugins.visualizations.add({
         }
 
         .survey-title {
-          font-size: 14px;
+          font-size: 12px;
           font-weight: 600;
           line-height: 1.35;
           margin-bottom: 14px;
