@@ -13,15 +13,17 @@ looker.plugins.visualizations.add({
           gap: 18px;
           font-family: Arial, sans-serif;
           padding: 12px;
+          align-items: start;
         }
 
         .survey-card {
-          border: 1px solid #e5e7eb;
+          border: 1px solid #d1d5db;
           border-radius: 10px;
           padding: 16px;
           background: #ffffff;
           box-shadow: 0 1px 3px rgba(0,0,0,0.08);
           transition: transform .15s ease, box-shadow .15s ease;
+          height: auto;
         }
 
         .survey-card:hover {
@@ -33,12 +35,16 @@ looker.plugins.visualizations.add({
           font-size: 15px;
           font-weight: 600;
           line-height: 1.4;
-          margin-bottom: 16px;
+          margin-bottom: 18px;
           color: #111827;
         }
 
         .bar-row {
           margin-bottom: 12px;
+        }
+
+        .bar-row:last-child {
+          margin-bottom: 0;
         }
 
         .bar-label {
@@ -75,7 +81,7 @@ looker.plugins.visualizations.add({
         .bar-value {
           width: 54px;
           font-size: 13px;
-          font-weight: 600;
+          font-weight: 700;
           text-align: right;
           color: #111827;
         }
