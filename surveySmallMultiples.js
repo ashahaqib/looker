@@ -24,7 +24,8 @@ looker.plugins.visualizations.add({
           background: #fff;
           box-shadow: 0 1px 3px rgba(0,0,0,.08);
           transition: transform .15s ease, box-shadow .15s ease;
-          height: 100%;
+            /* Important */
+          align-self: stretch;
           box-sizing: border-box;
         }
 
