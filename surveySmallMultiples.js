@@ -33,7 +33,7 @@ looker.plugins.visualizations.add({
 
         .survey-title {
           font-size: 15px;
-          font-weight: 600;
+          font-weight: 500;
           line-height: 1.4;
           margin-bottom: 18px;
           color: #111827;
@@ -49,7 +49,7 @@ looker.plugins.visualizations.add({
 
         .bar-label {
           font-size: 13px;
-          font-weight: 500;
+          font-weight: 400;
           margin-bottom: 5px;
           color: #374151;
           white-space: nowrap;
