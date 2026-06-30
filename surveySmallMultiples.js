@@ -16,34 +16,28 @@ looker.plugins.visualizations.add({
         }
 
         .survey-card {
-          border: 1px solid #d1d5db;
+          border: 1px solid #e5e7eb;
           border-radius: 10px;
-          padding: 16px;
+          padding: 14px;
           background: #ffffff;
           box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-          box-sizing: border-box;
         }
 
         .survey-title {
           font-size: 14px;
           font-weight: 600;
-          line-height: 1.4;
+          line-height: 1.35;
           margin-bottom: 16px;
           color: #111827;
         }
 
         .bar-row {
-          margin-bottom: 12px;
-        }
-
-        .bar-row:last-child {
-          margin-bottom: 0;
+          margin-bottom: 10px;
         }
 
         .bar-label {
-          font-size: 13px;
-          font-weight: 400;
-          margin-bottom: 5px;
+          font-size: 12px;
+          margin-bottom: 4px;
           color: #374151;
           white-space: nowrap;
           overflow: hidden;
@@ -53,34 +47,34 @@ looker.plugins.visualizations.add({
         .bar-wrap {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 8px;
         }
 
         .bar-bg {
           flex: 1;
-          height: 18px;
+          height: 16px;
           background: #f3f4f6;
-          border-radius: 999px;
+          border-radius: 8px;
           overflow: hidden;
         }
 
         .bar-fill {
           height: 100%;
-          background: #3b82f6;
-          border-radius: 999px;
+          background: #4f7cff;
+          border-radius: 8px;
         }
 
         .bar-value {
-          width: 54px;
-          font-size: 13px;
-          font-weight: 700;
+          width: 48px;
+          font-size: 12px;
           text-align: right;
           color: #111827;
+          font-weight: 700;
         }
 
         .survey-empty {
           padding: 20px;
-          font-size: 14px;
+          font-size: 13px;
           color: #555;
         }
       </style>
@@ -124,19 +118,13 @@ looker.plugins.visualizations.add({
     const grouped = {};
 
     data.forEach((row) => {
-      const question =
-        row[questionField.name]?.rendered ||
-        row[questionField.name]?.value ||
-        "Unknown Question";
+      const question = row[questionField.name]?.rendered || row[questionField.name]?.value || "Unknown Question";
+      const response = row[responseField.name]?.rendered || row[responseField.name]?.value || "Unknown Response";
 
-      const response =
-        row[responseField.name]?.rendered ||
-        row[responseField.name]?.value ||
-        "Unknown Response";
+      let value = row[measureField.name]?.value || 0;
+      value = Number(value);
 
-      let value = Number(row[measureField.name]?.value || 0);
-
-      if (value <= 1) value *= 100;
+      if (value <= 1) value = value * 100;
 
       if (!grouped[question]) grouped[question] = [];
       grouped[question].push({ response, value });
@@ -174,30 +162,6 @@ looker.plugins.visualizations.add({
 
       grid.appendChild(card);
     });
-
-    // Force same-height cards within each visual row
-    setTimeout(() => {
-      const cards = Array.from(grid.querySelectorAll(".survey-card"));
-
-      cards.forEach((card) => {
-        card.style.height = "auto";
-      });
-
-      const rows = {};
-
-      cards.forEach((card) => {
-        const top = Math.round(card.offsetTop);
-        if (!rows[top]) rows[top] = [];
-        rows[top].push(card);
-      });
-
-      Object.values(rows).forEach((rowCards) => {
-        const maxHeight = Math.max(...rowCards.map((card) => card.offsetHeight));
-        rowCards.forEach((card) => {
-          card.style.height = `${maxHeight}px`;
-        });
-      });
-    }, 0);
 
     done();
   }
