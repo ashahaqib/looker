@@ -11,27 +11,17 @@ looker.plugins.visualizations.add({
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
           gap: 18px;
+          font-family: Arial, sans-serif;
           padding: 12px;
-          align-items: stretch;
         }
 
         .survey-card {
-          display: flex;
-          flex-direction: column;
           border: 1px solid #d1d5db;
           border-radius: 10px;
           padding: 16px;
-          background: #fff;
-          box-shadow: 0 1px 3px rgba(0,0,0,.08);
-          transition: transform .15s ease, box-shadow .15s ease;
-            /* Important */
-          align-self: stretch;
+          background: #ffffff;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.08);
           box-sizing: border-box;
-        }
-
-        .survey-card:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0,0,0,.12);
         }
 
         .survey-title {
@@ -78,7 +68,6 @@ looker.plugins.visualizations.add({
           height: 100%;
           background: #3b82f6;
           border-radius: 999px;
-          transition: width .4s ease;
         }
 
         .bar-value {
@@ -145,17 +134,12 @@ looker.plugins.visualizations.add({
         row[responseField.name]?.value ||
         "Unknown Response";
 
-      let value = row[measureField.name]?.value || 0;
-      value = Number(value);
+      let value = Number(row[measureField.name]?.value || 0);
 
       if (value <= 1) value *= 100;
 
       if (!grouped[question]) grouped[question] = [];
-
-      grouped[question].push({
-        response,
-        value
-      });
+      grouped[question].push({ response, value });
     });
 
     Object.keys(grouped).forEach((question) => {
@@ -176,18 +160,12 @@ looker.plugins.visualizations.add({
         const width = Math.max(0, Math.min(100, r.value));
 
         row.innerHTML = `
-          <div class="bar-label" title="${r.response}">
-            ${r.response}
-          </div>
-
+          <div class="bar-label" title="${r.response}">${r.response}</div>
           <div class="bar-wrap">
             <div class="bar-bg">
               <div class="bar-fill" style="width:${width}%"></div>
             </div>
-
-            <div class="bar-value">
-              ${r.value.toFixed(1)}%
-            </div>
+            <div class="bar-value">${r.value.toFixed(1)}%</div>
           </div>
         `;
 
@@ -196,6 +174,30 @@ looker.plugins.visualizations.add({
 
       grid.appendChild(card);
     });
+
+    // Force same-height cards within each visual row
+    setTimeout(() => {
+      const cards = Array.from(grid.querySelectorAll(".survey-card"));
+
+      cards.forEach((card) => {
+        card.style.height = "auto";
+      });
+
+      const rows = {};
+
+      cards.forEach((card) => {
+        const top = Math.round(card.offsetTop);
+        if (!rows[top]) rows[top] = [];
+        rows[top].push(card);
+      });
+
+      Object.values(rows).forEach((rowCards) => {
+        const maxHeight = Math.max(...rowCards.map((card) => card.offsetHeight));
+        rowCards.forEach((card) => {
+          card.style.height = `${maxHeight}px`;
+        });
+      });
+    }, 0);
 
     done();
   }
