@@ -28,7 +28,7 @@ looker.plugins.visualizations.add({
           font-size: 14px;
           font-weight: 600;
           line-height: 1.35;
-          margin-bottom: 16px;
+          margin-bottom: 14px;
           color: #111827;
         }
 
