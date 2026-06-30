@@ -11,17 +11,21 @@ looker.plugins.visualizations.add({
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
           gap: 18px;
-          font-family: Arial, sans-serif;
           padding: 12px;
+          align-items: stretch;
         }
 
         .survey-card {
+          display: flex;
+          flex-direction: column;
           border: 1px solid #d1d5db;
           border-radius: 10px;
           padding: 16px;
-          background: #ffffff;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+          background: #fff;
+          box-shadow: 0 1px 3px rgba(0,0,0,.08);
           transition: transform .15s ease, box-shadow .15s ease;
+          height: 100%;
+          box-sizing: border-box;
         }
 
         .survey-card:hover {
