@@ -13,7 +13,6 @@ looker.plugins.visualizations.add({
           gap: 18px;
           font-family: Arial, sans-serif;
           padding: 12px;
-          align-items: start;
         }
 
         .survey-card {
@@ -23,7 +22,6 @@ looker.plugins.visualizations.add({
           background: #ffffff;
           box-shadow: 0 1px 3px rgba(0,0,0,0.08);
           transition: transform .15s ease, box-shadow .15s ease;
-          height: auto;
         }
 
         .survey-card:hover {
@@ -33,7 +31,7 @@ looker.plugins.visualizations.add({
 
         .survey-title {
           font-size: 15px;
-          font-weight: 500;
+          font-weight: 600;
           line-height: 1.4;
           margin-bottom: 18px;
           color: #111827;
@@ -148,6 +146,7 @@ looker.plugins.visualizations.add({
       if (value <= 1) value *= 100;
 
       if (!grouped[question]) grouped[question] = [];
+
       grouped[question].push({
         response,
         value
